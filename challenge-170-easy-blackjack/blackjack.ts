@@ -9,6 +9,12 @@ class Player {
     cards:Array<Card>;
 }
 
+// ----- Parsing Logic ----- \\
+
+function openFile(filename:string) {
+    fs.readFile(filename, 'utf8', processFile);
+}
+
 function processFile(err, data) {
     if (err) {
         console.log(err);
@@ -24,13 +30,12 @@ function processFile(err, data) {
         players.push(parsePlayer(lines[i + 1]));
     }
 
-    checkGame(players);
+    console.log(checkGame(players));
 }
 
 function parsePlayer(line:string) {
     var player = new Player();
 
-    // Maybe replace with line.substring(0, line.indexOf(' ') or something
     var nameSplit:Array<string> = line.split(':');
 
     player.name = nameSplit[0];
@@ -52,16 +57,90 @@ function parseCard(cardText:string) {
     return cardValue;
 }
 
+// ----- Game State Checking ----- \\
+
 function checkGame(players:Array<Player>) {
-    console.log("Player Count: " + players.length);
+    var fiveCardTrickWinners:Array<Player> = findFiveCardTrickWinners(players);
 
-    for(var i:number = 0; i < players.length; i++) {
-        console.log("Player " + (i + 1) + ": " + players[i].name + " - " + players[i].cards);
+    if(fiveCardTrickWinners.length == 1) {
+        return fiveCardTrickWinners[0].name + " has won with a 5-card trick!";
+    } else if(fiveCardTrickWinners.length > 1) {
+        return "Tie";
     }
-};
 
-function openFile(filename:string) {
-    fs.readFile(filename, 'utf8', processFile);
+    var winner:Player;
+    var winnerValue:number = 0;
+    var tie:boolean = false;
+    for(var i:number = 0; i < players.length; i++) {
+        var value = findCardsValue(players[i].cards);
+
+        if(value > winnerValue && value <= 21) {
+            tie = false;
+            winnerValue = value;
+            winner = players[i];
+        } else if(value == winnerValue) {
+            tie = true;
+        }
+    }
+
+    if(winner === null) {
+        return "No winner"
+    }
+
+    if(tie) {
+        return "Tie";
+    }
+
+    return winner.name + " has won!";
 }
 
-openFile('example1.txt');
+function findFiveCardTrickWinners(players:Array<Player>) {
+    var winners:Array<Player> = [];
+
+    for(var i:number = 0; i < players.length; i++) {
+        var cards:Array<Card> = players[i].cards;
+
+        if(cards.length === 5) {
+            if(findCardsValue(cards) <= 21) {
+                winners.push(players[i]);
+            }
+        }
+    }
+
+    return winners 
+}
+
+function findCardsValue(cards:Array<Card>) {
+    var value = 0;
+    var aceCount = 0;
+
+    for(var i:number = 0; i < cards.length; i++) {
+        var card:Card = cards[i];
+
+        switch(card) {
+            case Card.Jack:
+            case Card.Queen:
+            case Card.King:
+                value += 10;
+                break;
+            case Card.Ace:
+                value += 1;
+                aceCount++;
+                break;
+            default:
+                value += cards[i];
+
+        }
+    }
+
+    // Process ace case. We aleady added the initial "1" so try adding the addition "10" and see if we bust.
+    for(var i:number = 0; i < aceCount; i++) {
+        if(value + 10 <= 21) {
+            value += 10;
+        }
+    }
+
+    return value;
+}
+
+openFile('example2.txt');
