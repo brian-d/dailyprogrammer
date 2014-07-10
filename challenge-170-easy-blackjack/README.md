@@ -8,6 +8,8 @@ I gave this a crack using Typescript with the intention of being run through nod
 
 All in all a good challenge and a nice way to get a little more Typescript/nodejs experience.
 
+Declarations
+
     declare function require(name:string);
 
     var fs = require('fs');
@@ -19,7 +21,7 @@ All in all a good challenge and a nice way to get a little more Typescript/nodej
         cards:Array<Card>;
     }
 
-    // ----- Parsing Logic ----- \\
+Parsing Logic
 
     function runGame(filename:string) {
         fs.readFile(filename, 'utf8', processFile);
@@ -67,7 +69,7 @@ All in all a good challenge and a nice way to get a little more Typescript/nodej
         return cardValue;
     }
 
-    // ----- Game State Checking ----- \\
+Game State Logic
 
     function checkGame(players:Array<Player>) {
         var fiveCardTrickWinners:Array<Player> = findFiveCardTrickWinners(players);
@@ -152,6 +154,8 @@ All in all a good challenge and a nice way to get a little more Typescript/nodej
 
         return value;
     }
+
+Game running
 
     runGame('example1.txt');
     console.log('expected result: Alice wins');
