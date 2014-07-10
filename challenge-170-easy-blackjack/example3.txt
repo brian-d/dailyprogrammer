@@ -1,0 +1,4 @@
+3
+Alice: Ace of Diamonds, Ace of Spades, Ace of Clubs, Ace of Hearts
+Bob: Three of Hearts, Six of Spades, Seven of Spades, Ten of Diamonds
+Chris: Ten of Hearts, Three of Diamonds

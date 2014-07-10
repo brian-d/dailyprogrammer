@@ -2,7 +2,7 @@ declare function require(name:string);
 
 var fs = require('fs');
 
-enum Card { One = 1, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace }
+enum Card { Two = 2, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace }
 
 class Player {
     name:string;
@@ -11,7 +11,7 @@ class Player {
 
 // ----- Parsing Logic ----- \\
 
-function openFile(filename:string) {
+function runGame(filename:string) {
     fs.readFile(filename, 'utf8', processFile);
 }
 
@@ -83,7 +83,7 @@ function checkGame(players:Array<Player>) {
         }
     }
 
-    if(winner === null) {
+    if(!winner) {
         return "No winner"
     }
 
@@ -143,4 +143,20 @@ function findCardsValue(cards:Array<Card>) {
     return value;
 }
 
-openFile('example2.txt');
+runGame('example1.txt');
+console.log('expected result: Alice wins');
+
+runGame('example2.txt');
+console.log('expected result: David wins (5 card trick)');
+
+runGame('example3.txt');
+console.log('expected result: Alice wins');
+
+runGame('example4.txt');
+console.log('expected result: Everyone busts (tie)');
+
+runGame('example5.txt');
+console.log('expected result: Tie');
+
+runGame('example6.txt');
+console.log('expected result: Tie');

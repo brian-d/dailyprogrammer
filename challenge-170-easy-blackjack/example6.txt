@@ -1,0 +1,4 @@
+3
+Alice: Ten of Hearts, Jack of Spades
+Bob: King of Diamonds, Five of Hearts, Five of Clubs
+Chris: Queen of Spades, King of Hearts
